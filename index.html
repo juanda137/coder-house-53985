@@ -3,10 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Postres</title>
+    <link rel="stylesheet" href="./estilos/estilos.css">
+    <title>Susi Fiallo cupcakes</title>
 </head>
 <body>
-    <h1>Postres</h1>
-    <script src="./javascript/javascript.js"></script>
+    <h1>Susi Fiallo postres</h1>
+    <h2>Bienvenidos a nuestra pasteleria aqui puedes ver algunos de nuestros productos, esperamos que lo disfrutes</h2>
+    <div id="contenedor" class="productos">
+    </div>
+
+    <h2>Carrito de compras</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Precio total</th>
+            </tr>
+        </thead>
+        <tbody id="carrito">
+
+        </tbody>
+    </table>
+
+    <div class="comprarBorrar">
+        <button class="comprarBoton">Comprar el carrito</button>
+        <button class="borrarBoton">Borrar el carrito</button>
+    </div>
+
+<script src="./javascript/main.js"></script>
 </body>
 </html>

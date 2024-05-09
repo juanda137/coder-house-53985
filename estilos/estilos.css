@@ -1,0 +1,86 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.productos .producto {
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px #A62177 solid;
+    border-radius: 10px;
+    transition: 1s;
+}
+
+#contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2%;
+    padding: 20px;
+    color: #A62177;
+}
+
+.producto:hover {
+    transform: scale(1.1);
+    transition: 1s;
+}
+.imagen {
+    width: 100%;
+    height: auto;
+}
+
+table {
+    text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+/*#A62177 #db2d9e*/
+thead {
+    background-color: #A62177;
+    border-bottom: 5px solid #621346;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+tr:hover td{
+    background-color: #db2d9e;
+}
+
+h1 {
+    text-align: center;
+    color: #A62177;
+}
+
+h2 {
+    text-align: center;
+    color: #A62177;
+}
+
+input, button {
+    border-radius: 5px;
+    background-color: transparent;
+    border: #621346 1.5px solid;
+    color: #A62177;
+}
+
+.comprarBorrar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10%;
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+button:hover {
+    background-color: #A62177;
+    color: white;
+}
