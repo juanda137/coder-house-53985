@@ -91,8 +91,8 @@ let contenedor = document.getElementById("contenedor")
 let tbodyCarrito = document.getElementById("carrito")
 let productos = [
     new producto("Torta de vainilla", 50000, "./imagenes/torta de vainilla.jpg"),
-    new producto("Torta de chocolate", 40000, "../imagenes/torta de chocolate.jpg"),
-    new producto("Torta de las tres leches", 70000, "../imagenes/torta tres leches.jpg")
+    new producto("Torta de chocolate", 40000, "./imagenes/torta de chocolate.jpg"),
+    new producto("Torta de las tres leches", 70000, "./imagenes/torta tres leches.jpg")
 ]
 
 let carrito = []
