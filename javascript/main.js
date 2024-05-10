@@ -16,7 +16,7 @@ function obtenerProductosLS() {
     renderizaCarrito(carrito)
 }
 
-function guardarProductosLS(params) {
+function guardarProductosLS() {
     const json = JSON.stringify(carrito)
     localStorage.setItem("productos", json)
 }
@@ -84,6 +84,11 @@ function renderizarProductos(productos) {
         contenedor.append(div)
     }
 }
+
+function proximamente() {
+    alert("proximamente")
+}
+
 let botonComprar = document.getElementById("comprarBoton")
 let botonBorrar = document.getElementById("borrarBoton")
 
@@ -98,3 +103,6 @@ let productos = [
 let carrito = []
 obtenerProductosLS()
 renderizarProductos(productos)
+
+botonComprar.addEventListener("click", proximamente)
+botonBorrar.addEventListener("click", proximamente)
