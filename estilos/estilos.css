@@ -84,3 +84,10 @@ button:hover {
     background-color: #A62177;
     color: white;
 }
+
+table {
+    text-align: center;
+}
+#h2Carrito {
+    padding-top: 20px;
+}

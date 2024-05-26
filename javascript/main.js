@@ -5,6 +5,9 @@ class producto {
         this.imagen = imagen
     }
 }
+function separadorDeMiles(numero) {
+    return numero.toLocaleString('es-ES');
+}
 
 function obtenerProductosLS() {
     const productosCarritoLS = JSON.parse(localStorage.getItem("productos"))
@@ -21,6 +24,15 @@ function guardarProductosLS() {
     localStorage.setItem("productos", json)
 }
 
+function eliminarDelCarrito(productoCarrito) {
+    const indiceProductoCarrito = carrito.findIndex((el) => {
+        return el.nombre === productoCarrito.nombre
+    })
+    carrito.splice(indiceProductoCarrito, 1)
+    renderizaCarrito(carrito)
+    guardarProductosLS()
+}
+
 function renderizaCarrito(carrito) {
     tbodyCarrito.innerHTML = ""
 
@@ -28,12 +40,29 @@ function renderizaCarrito(carrito) {
         const tr = document.createElement("tr")
         tr.innerHTML =`
         <td>${productoCarrito.nombre}</td>
-        <td>$${productoCarrito.precio}</td>
+        <td>$${separadorDeMiles(productoCarrito.precio)}</td>
         <td>${productoCarrito.cantidad}</td>
-        <td>$${productoCarrito.precio * productoCarrito.cantidad}</td>`;
+        <td>$${separadorDeMiles(productoCarrito.precio * productoCarrito.cantidad)}</td>`;
+
+        const botonBorrar = document.createElement("button")
+        botonBorrar.innerHTML = "Borrar";
+        botonBorrar.addEventListener("click", () => {
+            eliminarDelCarrito(productoCarrito)
+        })
+        tr.append(botonBorrar)
 
         tbodyCarrito.append(tr)
     }
+}
+
+function botonDinamicoComprar() {
+    Swal.fire({
+        title: "Se agrego al carrito correctamente",
+        icon: "success",
+        confirmButtonColor: "#A62177",
+        iconColor: "#A62177",
+        buttonsStyling: false
+    });
 }
 
 function agregarAlCarrito(producto, cantidad) {
@@ -48,10 +77,11 @@ function agregarAlCarrito(producto, cantidad) {
             precio : producto.precio,
             cantidad : cantidad
         })
+        botonDinamicoComprar()
     } else {
         carrito[indiceProductoCarrito].cantidad += cantidad
+        botonDinamicoComprar()
     }
-
     renderizaCarrito(carrito)
     guardarProductosLS()
 }
@@ -64,7 +94,7 @@ function renderizarProductos(productos) {
         div.className = "producto";
         div.innerHTML = `<h3>${producto.nombre}</h3>
         <img class="imagen" src="${producto.imagen}" alt="">
-        <h3>$${producto.precio}</h3>`
+        <h3>$${separadorDeMiles(producto.precio)}</h3>`
 
         const input = document.createElement("input")
         input.placeholder = "cantidad"
