@@ -161,7 +161,9 @@ function comprarProductos() {
     const precioFinal = precioTotal + interes;
 
     Swal.fire({
-        title: `El precio total de su compra es $${separadorDeMiles(precioTotal)}. El agregado de los intereses es $${separadorDeMiles(interes)}. El precio total de su compra es $${separadorDeMiles(precioFinal)}.`,
+        title: `<p>Total productos: <strong>$${separadorDeMiles(precioTotal)}</strong></p>
+        <p>Impuestos (10%): <strong>$${separadorDeMiles(interes)}</strong></p>
+        <p>Total: <strong>$${separadorDeMiles(precioFinal)}</strong></p>`,
         icon: "info",
         showCancelButton: true,
         confirmButtonText: 'Comprar',
