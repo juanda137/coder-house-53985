@@ -1,63 +1,84 @@
 class producto {
     constructor(nombre, precio, imagen) {
-        this.nombre = nombre
-        this.precio = precio
-        this.imagen = imagen
+        this.nombre = nombre;
+        this.precio = precio;
+        this.imagen = imagen;
     }
 }
+
 function separadorDeMiles(numero) {
     return numero.toLocaleString('es-ES');
 }
 
 function obtenerProductosLS() {
-    const productosCarritoLS = JSON.parse(localStorage.getItem("productos"))
+    const productosCarritoLS = JSON.parse(localStorage.getItem("productos"));
 
     if (productosCarritoLS) {
-        carrito = productosCarritoLS
+        carrito = productosCarritoLS;
     }
 
-    renderizaCarrito(carrito)
+    renderizaCarrito(carrito);
 }
 
 function guardarProductosLS() {
-    const json = JSON.stringify(carrito)
-    localStorage.setItem("productos", json)
+    const json = JSON.stringify(carrito);
+    localStorage.setItem("productos", json);
 }
 
 function eliminarDelCarrito(productoCarrito) {
     const indiceProductoCarrito = carrito.findIndex((el) => {
-        return el.nombre === productoCarrito.nombre
-    })
-    carrito.splice(indiceProductoCarrito, 1)
-    renderizaCarrito(carrito)
-    guardarProductosLS()
+        return el.nombre === productoCarrito.nombre;
+    });
+    carrito.splice(indiceProductoCarrito, 1);
+    renderizaCarrito(carrito);
+    guardarProductosLS();
+    Swal.fire({
+        title: "Se eliminó correctamente del carrito",
+        icon: "error",
+        confirmButtonColor: "#A62177",
+        iconColor: "#A62177",
+        buttonsStyling: false
+    });
+}
+
+function vaciarCarrito() {
+    carrito = [];
+    renderizaCarrito(carrito);
+    guardarProductosLS();
+    Swal.fire({
+        title: "Se ha vaciado el carrito",
+        icon: "success",
+        confirmButtonColor: "#A62177",
+        iconColor: "#A62177",
+        buttonsStyling: false
+    });
 }
 
 function renderizaCarrito(carrito) {
-    tbodyCarrito.innerHTML = ""
+    tbodyCarrito.innerHTML = "";
 
-    for(const productoCarrito of carrito) {
-        const tr = document.createElement("tr")
-        tr.innerHTML =`
+    for (const productoCarrito of carrito) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
         <td>${productoCarrito.nombre}</td>
         <td>$${separadorDeMiles(productoCarrito.precio)}</td>
         <td>${productoCarrito.cantidad}</td>
         <td>$${separadorDeMiles(productoCarrito.precio * productoCarrito.cantidad)}</td>`;
 
-        const botonBorrar = document.createElement("button")
+        const botonBorrar = document.createElement("button");
         botonBorrar.innerHTML = "Borrar";
         botonBorrar.addEventListener("click", () => {
-            eliminarDelCarrito(productoCarrito)
-        })
-        tr.append(botonBorrar)
+            eliminarDelCarrito(productoCarrito);
+        });
+        tr.append(botonBorrar);
 
-        tbodyCarrito.append(tr)
+        tbodyCarrito.append(tr);
     }
 }
 
 function botonDinamicoComprar() {
     Swal.fire({
-        title: "Se agrego al carrito correctamente",
+        title: "Se agregó al carrito correctamente",
         icon: "success",
         confirmButtonColor: "#A62177",
         iconColor: "#A62177",
@@ -66,73 +87,129 @@ function botonDinamicoComprar() {
 }
 
 function agregarAlCarrito(producto, cantidad) {
-    
-    const indiceProductoCarrito = carrito.findIndex((el) => {
-        return el.nombre === producto.nombre
-    })
+    if (isNaN(cantidad) || cantidad <= 0) {
+        Swal.fire({
+            title: 'Cantidad inválida',
+            text: 'Por favor ingrese un número válido y positivo.',
+            icon: 'error',
+            confirmButtonColor: "#A62177",
+            iconColor: "#A62177",
+            buttonsStyling: false
+        });
+        return;
+    }
 
+    const indiceProductoCarrito = carrito.findIndex((el) => {
+        return el.nombre === producto.nombre;
+    });
     if (indiceProductoCarrito === -1) {
         carrito.push({
-            nombre : producto.nombre,
-            precio : producto.precio,
-            cantidad : cantidad
-        })
-        botonDinamicoComprar()
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: cantidad
+        });
+        botonDinamicoComprar();
     } else {
-        carrito[indiceProductoCarrito].cantidad += cantidad
-        botonDinamicoComprar()
+        carrito[indiceProductoCarrito].cantidad += cantidad;
+        botonDinamicoComprar();
     }
-    renderizaCarrito(carrito)
-    guardarProductosLS()
+    renderizaCarrito(carrito);
+    guardarProductosLS();
 }
 
 function renderizarProductos(productos) {
     contenedor.innerHTML = "";
 
     for (const producto of productos) {
-        const div = document.createElement("div")
+        const div = document.createElement("div");
         div.className = "producto";
         div.innerHTML = `<h3>${producto.nombre}</h3>
         <img class="imagen" src="${producto.imagen}" alt="">
-        <h3>$${separadorDeMiles(producto.precio)}</h3>`
+        <h3>$${separadorDeMiles(producto.precio)}</h3>`;
 
-        const input = document.createElement("input")
-        input.placeholder = "cantidad"
+        const input = document.createElement("input");
+        input.placeholder = "cantidad";
         input.type = "number";
 
-        const button = document.createElement("button")
-        button.innerText = "agregar"
+        const button = document.createElement("button");
+        button.innerText = "agregar";
 
         button.addEventListener("click", () => {
-            const cantidad = parseInt(input.value)
-            
-            agregarAlCarrito(producto, cantidad)
-        })
+            const cantidad = parseInt(input.value);
+            agregarAlCarrito(producto, cantidad);
+        });
 
-        div.append(input, button)
-
-        contenedor.append(div)
+        div.append(input, button);
+        contenedor.append(div);
     }
 }
 
-function proximamente() {
-    alert("proximamente")
+function comprarProductos() {
+    if (carrito.length === 0) {
+        Swal.fire({
+            title: "El carrito está vacío",
+            icon: "warning",
+            confirmButtonColor: "#A62177",
+            iconColor: "#A62177",
+            buttonsStyling: false
+        });
+        return;
+    }
+
+    const precioTotal = carrito.reduce((total, productoCarrito) => total + (productoCarrito.precio * productoCarrito.cantidad), 0);
+    const interes = precioTotal * 0.10;
+    const precioFinal = precioTotal + interes;
+
+    Swal.fire({
+        title: `El precio total de su compra es $${separadorDeMiles(precioTotal)}. El agregado de los intereses es $${separadorDeMiles(interes)}. El precio total de su compra es $${separadorDeMiles(precioFinal)}.`,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: 'Comprar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: "#A62177",
+        cancelButtonColor: "#d33",
+        iconColor: "#A62177",
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: '¡Compra realizada!',
+                text: `El precio total de su compra es $${separadorDeMiles(precioFinal)}.`,
+                icon: 'success',
+                confirmButtonColor: "#A62177",
+                iconColor: "#A62177",
+                buttonsStyling: false
+            });
+            carrito = [];
+            renderizaCarrito(carrito);
+            guardarProductosLS();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+                title: 'No se compró nada',
+                icon: 'info',
+                confirmButtonColor: "#A62177",
+                iconColor: "#A62177",
+                buttonsStyling: false
+            });
+        }
+    });
 }
 
-let botonComprar = document.getElementById("comprarBoton")
-let botonBorrar = document.getElementById("borrarBoton")
+let botonComprar = document.getElementById("comprarBoton");
+let botonBorrar = document.getElementById("borrarBoton");
+let botonBorrarTodo = document.getElementById("borrarTodoBoton");
 
-let contenedor = document.getElementById("contenedor")
-let tbodyCarrito = document.getElementById("carrito")
+let contenedor = document.getElementById("contenedor");
+let tbodyCarrito = document.getElementById("carrito");
 let productos = [
     new producto("Torta de vainilla", 50000, "./imagenes/torta de vainilla.jpg"),
     new producto("Torta de chocolate", 40000, "./imagenes/torta de chocolate.jpg"),
     new producto("Torta de las tres leches", 70000, "./imagenes/torta tres leches.jpg")
-]
+];
 
-let carrito = []
-obtenerProductosLS()
-renderizarProductos(productos)
+let carrito = [];
+obtenerProductosLS();
+renderizarProductos(productos);
 
-botonComprar.addEventListener("click", proximamente)
-botonBorrar.addEventListener("click", proximamente)
+botonComprar.addEventListener("click", comprarProductos);
+botonBorrar.addEventListener("click", vaciarCarrito);
