@@ -10,6 +10,20 @@ function separadorDeMiles(numero) {
     return numero.toLocaleString('es-ES');
 }
 
+function simularCompra() {
+    return new Promise((resolve, reject) => {
+        // Simulación de compra asíncrona
+        setTimeout(() => {
+            const exito = Math.random() < 0.8; // Simula un 80% de éxito en la compra
+            if (exito) {
+                resolve(); // Resolvemos la promesa si la compra tiene éxito
+            } else {
+                reject("Error al procesar la compra. Por favor, inténtelo de nuevo."); // Rechazamos la promesa si hay un error en la compra
+            }
+        }, 2000); // Simulamos una demora de 2 segundos
+    });
+}
+
 function obtenerProductosLS() {
     const productosCarritoLS = JSON.parse(localStorage.getItem("productos"));
 
@@ -70,9 +84,9 @@ function renderizaCarrito(carrito) {
         botonBorrar.addEventListener("click", () => {
             eliminarDelCarrito(productoCarrito);
         });
-        tr.append(botonBorrar);
+        tr.appendChild(botonBorrar); 
 
-        tbodyCarrito.append(tr);
+        tbodyCarrito.appendChild(tr); 
     }
 }
 
@@ -139,8 +153,9 @@ function renderizarProductos(productos) {
             agregarAlCarrito(producto, cantidad);
         });
 
-        div.append(input, button);
-        contenedor.append(div);
+        div.appendChild(input); 
+        div.appendChild(button); 
+        contenedor.appendChild(div); 
     }
 }
 
@@ -163,7 +178,8 @@ function comprarProductos() {
     Swal.fire({
         title: `<p>Total productos: <strong>$${separadorDeMiles(precioTotal)}</strong></p>
         <p>Impuestos (10%): <strong>$${separadorDeMiles(interes)}</strong></p>
-        <p>Total: <strong>$${separadorDeMiles(precioFinal)}</strong></p>`,
+        <p>Total: <strong>$${separadorDeMiles(precioFinal
+        )}</strong></p>`,
         icon: "info",
         showCancelButton: true,
         confirmButtonText: 'Comprar',
@@ -174,17 +190,30 @@ function comprarProductos() {
         buttonsStyling: false
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire({
-                title: '¡Compra realizada!',
-                text: `El precio total de su compra es $${separadorDeMiles(precioFinal)}.`,
-                icon: 'success',
-                confirmButtonColor: "#A62177",
-                iconColor: "#A62177",
-                buttonsStyling: false
-            });
-            carrito = [];
-            renderizaCarrito(carrito);
-            guardarProductosLS();
+            simularCompra()
+                .then(() => {
+                    Swal.fire({
+                        title: '¡Compra realizada!',
+                        text: `El precio total de su compra es $${separadorDeMiles(precioFinal)}.`,
+                        icon: 'success',
+                        confirmButtonColor: "#A62177",
+                        iconColor: "#A62177",
+                        buttonsStyling: false
+                    });
+                    carrito = [];
+                    renderizaCarrito(carrito);
+                    guardarProductosLS();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: error,
+                        icon: 'error',
+                        confirmButtonColor: "#A62177",
+                        iconColor: "#A62177",
+                        buttonsStyling: false
+                    });
+                });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire({
                 title: 'No se compró nada',
