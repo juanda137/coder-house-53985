@@ -14,7 +14,7 @@ function simularCompra() {
     return new Promise((resolve, reject) => {
         // Simulación de compra asíncrona
         setTimeout(() => {
-            const exito = Math.random() < 0.8; // Simula un 80% de éxito en la compra
+            const exito = Math.random() < 1; // Simula un 80% de éxito en la compra
             if (exito) {
                 resolve(); // Resolvemos la promesa si la compra tiene éxito
             } else {
